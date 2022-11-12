@@ -1,6 +1,6 @@
 import random
 from random import randint
-import socket
+
 width = 20
 height = 20
 width_room = 3
@@ -29,6 +29,13 @@ class Character:
         self.coords = None #хрен знает, может убрать?
         self.speed = speed
 
+    def rases(self):
+        if type_of_person == 'человек' or 'Человек':
+            self.health = 100
+            self.armor = 10
+            self.speed = 5
+            self.attack_range = 1
+            self.attack_damage = 20
 
 """тут я хочу прописать метод атаки персонажа"""
     #def start_attack (self):
@@ -65,12 +72,12 @@ class Monster(Character):
         self.radius_finding  = radius_finding
 
 def main():
-
+    global type_of_person
     print('''Добро пожаловать в подземелье, 
 Выбор расы во многом поможет Вам справиться с трудностями
 Отличительные черты человека: защита и урон, эльфа - скорость, а гнома - уровень здооровья''')
 
-    type_of_person = input(f'Выберите расу персонажа: человек, эльф или гном ')
+    type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
     name_person= input('Назовите Вашего персонажа: ')
 
     if type_of_person == 'человек' or 'Человек':
