@@ -100,6 +100,12 @@ class Character:
             self.attack_damage = 22
         return self.attack_damage
 
+    def upadets_param(self):
+        self.health = Character.get_health(self)
+        self.speed = Character.get_speed(self)
+        self.armor = Character.get_armor(self)
+        self.attack_range = Character.get_damage_range(self)
+        self.attack_damage = Character.get_attack_damage(self)
 """тут я хочу прописать метод атаки персонажа"""
     #def start_attack (self):
 
@@ -153,17 +159,16 @@ def main():
     type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
     name_person= input('Назовите Вашего персонажа: ')
 
-    """if type_of_person == 'человек' or 'Человек':
-        person1 = Character(name_person, 100, 10, 1, 20, 5)
-    elif type_of_person == 'эльф' or 'Эльф':
-        person1 = Character(name_person, 90, 10, 2, 25, 7)
-    elif type_of_person == 'гном' or 'Гном':
-        person1 = Character(name_person, 120, 12, 1, 22, 3)"""
     person1 = Character(name_person, type_of_person)
-    print(person1.health)
+    person1.get_armor()
+    person1.get_attack_damage()
+    person1.get_damage_range()
+    person1.get_speed()
+    person1.get_health()
+    person1.upadets_param()
 
-    print('''Имя: {},уровень жизни : {}, уровень защиты: {}, дальность атаки: {}, урон: {} и скорость: {}
-            '''.format(person1.name, person1.health, person1.armor, person1.attack_range, person1.attack_damage, person1.speed))
+    print(f'''Имя: {person1.name},уровень жизни : {person1.health}, уровень защиты: {person1.armor}, дальность атаки: {person1.attack_range}, 
+урон: {person1.attack_damage} и скорость: {person1.speed}''')
 
 
     rooms = [0]*3
