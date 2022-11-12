@@ -2,7 +2,6 @@ import random
 from random import randint
 key_list = ['w', 'a', 's', 'd']
 
-
 class room:
     def __init__(self):
         self.X = random.randint(5,10)
@@ -33,6 +32,7 @@ class room:
         self.s_coor_monster = second_coor_monster
         self.matrix[self.Y0][self.X0] = '1'
         self.matrix[self.f_coor_monster][self.s_coor_monster] = '*' #хочу, чтобы звёздочка убиралась на каждой итерации
+        return self.Y0 , self.X0
         """
         тут пытаюсь создать обновляющееся поле для монстра
         """
@@ -154,13 +154,13 @@ class Monster(Character):
                 self.second_coor_monster = self.second_coor_monster
 
         elif direction == 's':
-            if self.second_coor_monster < 5:
+            if self.second_coor_monster < len(room.matrix):
                 self.second_coor_monster += 1
             else:
                 self.second_coor_monster = self.second_coor_monster
 
         elif direction == 'd':
-            if self.first_coor_monster < 5:
+            if self.first_coor_monster < len(room.matrix):
                 self.first_coor_monster += 1
             else:
                 self.first_coor_monster = self.first_coor_monster
@@ -206,14 +206,7 @@ def main():
     first_coor_monster_random = random.randint(1, 5) #создаём рандомного монстра
     second_coor_monster_random = random.randint(1, 5)
     monster = Monster("Гоблин", first_coor_monster_random, second_coor_monster_random) #указываем ему его координаты
-
-    """
-    это боёвка
-    """
     monster.get_monster_health()
-    person1.start_attack( monster)
-    print(monster.health)
-
     rooms = [0]*3
     for i in range(3):
         rooms[i] = room()
@@ -222,8 +215,21 @@ def main():
         n = i
         while True:
             new_cord = Character.move(input('Введите напраление "w", "a", "s", "d"'), rooms[n].cord0, rooms[n].cord, rooms[n].exit, rooms[n].input)
+            """
+            это боёвка
+            """
+            button_attack = str(input('Желаете напасть на врага? Если да - нажмите f'))
+            if button_attack == ('f' or 'F'):
+                if...
+                    """тут надо сделать проверку условия, что если дистанция между монстром и игроком
+                    #меньше или  оавна person1.range_damage, то можно провести атаку)"""
+                    person1.start_attack(monster)
+                    print(f'Здоровье монстра после атаки: {monster.health}')
+                else:
+                    print('Дистанция слишком велика для атаки')
             new_cord1, new_cord2 = monster.move()
             rooms[n].update(new_cord, new_cord1, new_cord2)
+
             if rooms[n].input[0]==rooms[n].cord0[0] and rooms[n].input[1]==rooms[n].cord0[1] and n!=0:
                 n=n-1
 
@@ -236,5 +242,3 @@ def main():
     print('ВЫ ПОБЕДИЛИ !!!')
 
 main()
-
-
