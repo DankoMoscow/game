@@ -71,6 +71,16 @@ class Monster(Character):
         self.health = health
         self.radius_finding  = radius_finding
 
+class Items:
+    def __init__(self, room, value, rare):
+        self.room = room
+        self.value = value
+        self.rare = rare #тут будет редкость с рандомом вероятности появления предмета
+
+    def parametres(self, name_item):
+        if name_item == 'Кинжал':
+            damage_item = 5
+
 def main():
     global type_of_person
     print('''Добро пожаловать в подземелье, 
@@ -86,7 +96,6 @@ def main():
         person1 = Character(name_person, 90, 10, 2, 25, 7)
     elif type_of_person == 'гном' or 'Гном':
         person1 = Character(name_person, 120, 12, 1, 22, 3)
-
 
     print('''Имя: {},уровень жизни : {}, уровень защиты: {}, дальность атаки: {}, урон: {} и скорость: {}
             '''.format(person1.name, person1.health, person1.armor, person1.attack_range, person1.attack_damage, person1.speed))
