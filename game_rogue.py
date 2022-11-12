@@ -21,32 +21,42 @@ for rows in matrix_zero_empty:
 
 class Character:
     def __init__(self, name, health, armor, attack_range, attack_damage, speed):
-        self.name = None
-        self.health = 0
-        self.armor = 0
-        self.attack_range = 0
-        self.attack_damage = 0
+        self.name = name
+        self.health = health
+        self.armor = armor
+        self.attack_range = attack_range
+        self.attack_damage = attack_damage
         self.coords = None #хрен знает, может убрать?
-        self.speed = 0
+        self.speed = speed
 
-    def rases(self):
+    """def rases(self):
         if type_of_person == "человек" or "Человек":
             self.health = 100
             self.armor = 10
+            self.speed = 1
+            self.attack_damage = 20
+            self.attack_range = 1"""
+
+
 def main():
-    global type_of_person
+
     print('''Добро пожаловать в подземелье, 
 Выбор расы во многом поможет Вам справиться с трудностями
 Отличительные черты человека: защита и урон, эльфа - скорость, а гнома - уровень здооровья''')
-    type_of_person = input(f'Выберите расу персонажа: человек, эльф или гном')
-    name_person= input('Назовите Вашего персонажа')
-    if type_of_person == 'эльф' or 'Эльф':
+
+    type_of_person = input(f'Выберите расу персонажа: человек, эльф или гном ')
+    name_person= input('Назовите Вашего персонажа: ')
+
+    if type_of_person == 'человек' or 'Человек':
+        person1 = Character(name_person, 100, 10, 1, 20, 5)
+    elif type_of_person == 'эльф' or 'Эльф':
         person1 = Character(name_person, 90, 10, 2, 25, 7)
     elif type_of_person == 'гном' or 'Гном':
         person1 = Character(name_person, 120, 12, 1, 22, 3)
 
     print('''Имя: {},уровень жизни : {}, уровень защиты: {}, дальность атаки: {}, урон: {} и скорость: {}
             '''.format(person1.name, person1.health, person1.armor, person1.attack_range, person1.attack_damage, person1.speed))
+
 main()
 
 
