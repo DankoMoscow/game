@@ -138,11 +138,27 @@ class Monster(Character):
         self.name_monster = name_monster
         self.health = 0
         self.armor = 0
+        self.attack_damage = 0
+        self.attack_range = 0
+        self.speed = 0
 
     def get_monster_health(self):
         if self.name_monster == 'Гоблин':
             self.health = 40
+        elif self.name_monster == 'Орк':
+            self.health = 80
+        elif self.name_monster == 'Разбойник':
+            self.health = 55
         return self.health
+
+    def get_monster_damage(self):
+        if self.name_monster == 'Гоблин':
+            self.health = 5
+        elif self.name_monster == 'Орк':
+            self.health = 20
+        elif self.name_monster == 'Разбойник':
+            self.health = 15
+        return self.attack_damage
 
     def move(self):
         global key_list, direction
@@ -203,10 +219,15 @@ def main():
     print(f'''Имя: {person1.name}, уровень жизни : {person1.health}, уровень защиты: {person1.armor}, 
 дальность атаки: {person1.attack_range}, урон: {person1.attack_damage} и скорость: {person1.speed}''')
 
-    first_coor_monster_random = random.randint(1, 5) #создаём рандомного монстра
-    second_coor_monster_random = random.randint(1, 5)
-    monster = Monster("Гоблин", first_coor_monster_random, second_coor_monster_random) #указываем ему его координаты
+    first_coor_monster_random = random.randint(1, 5) #создаём координаты для рандомного монстра
+    second_coor_monster_random = random.randint(1, 5) #создаём координаты для рандомного монстра
+
+    list_enemy = ('Гоблин', 'Орк', 'Разйбойник')
+    name_enemy = random.choice(list_enemy)
+    monster = Monster(name_enemy, first_coor_monster_random, second_coor_monster_random) #указываем ему его координаты
     monster.get_monster_health()
+    monster.get_monster_damage()
+
     rooms = [0]*3
     for i in range(3):
         rooms[i] = room()
@@ -227,6 +248,7 @@ def main():
                     print(f'Здоровье монстра после атаки: {monster.health}')
                 else:
                     print('Дистанция слишком велика для атаки')
+
             new_cord1, new_cord2 = monster.move()
             rooms[n].update(new_cord, new_cord1, new_cord2)
 
