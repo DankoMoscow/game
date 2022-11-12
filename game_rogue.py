@@ -1,5 +1,7 @@
 import random
 from random import randint
+key_list = ['w', 'a', 's', 'd']
+
 
 class room:
     def __init__(self):
@@ -23,16 +25,11 @@ class room:
         self.cord0 = [self.X0,self.Y0]
         self.cord = [self.X,self.Y]
 
-
-    def apdate(self,new_cord):
+    def update(self,new_cord):
         self.matrix[self.Y0][self.X0] = ' '
         self.Y0 =  new_cord[1]
         self.X0 = new_cord[0]
         self.matrix[self.Y0][self.X0] = '1'
-
-
-
-
 
     def display(self):
         for i in range(0, len(self.matrix)):
@@ -41,8 +38,6 @@ class room:
 
             print()
         print()
-
-
 
 class Character:
     def __init__(self, name, type_of_person):
@@ -56,89 +51,109 @@ class Character:
         self.speed = 0
 
     def get_health(self):
-        if self.type_of_person == 'человек' or 'Человек':
+        if self.type_of_person == ('человек' or 'Человек'):
             self.health = 100
-        elif self.type_of_person == 'эльф' or 'Эльф':
+        elif self.type_of_person == ('эльф' or 'Эльф'):
             self.health = 90
-        elif self.type_of_person == 'гном' or 'Гном':
+        elif self.type_of_person == ('гном' or 'Гном'):
             self.health = 120
         return self.health
 
     def get_armor(self):
-        if self.type_of_person == 'человек' or 'Человек':
+        if self.type_of_person == ('человек' or 'Человек'):
             self.armor = 10
-        elif self.type_of_person == 'эльф' or 'Эльф':
+        elif self.type_of_person == ('эльф' or 'Эльф'):
             self.armor = 8
-        elif self.type_of_person == 'гном' or 'Гном':
+        elif self.type_of_person == ('гном' or 'Гном'):
             self.armor = 12
         return self.armor
 
     def get_speed(self):
-        if self.type_of_person == 'человек' or 'Человек':
+        if self.type_of_person == ('человек' or 'Человек'):
             self.speed = 5
-        elif self.type_of_person == 'эльф' or 'Эльф':
+        elif self.type_of_person == ('эльф' or 'Эльф'):
             self.speed = 8
-        elif self.type_of_person == 'гном' or 'Гном':
+        elif self.type_of_person == ('гном' or 'Гном'):
             self.speed = 3
         return self.speed
 
     def get_damage_range(self):
-        if self.type_of_person == 'человек' or 'Человек':
+        if self.type_of_person == ('человек' or 'Человек'):
             self.attack_range = 1
-        elif self.type_of_person == 'эльф' or 'Эльф':
+        elif self.type_of_person == ('эльф' or 'Эльф'):
             self.attack_range = 2
-        elif self.type_of_person == 'гном' or 'Гном':
+        elif self.type_of_person == ('гном' or 'Гном'):
             self.attack_range = 1
         return self.attack_range
 
     def get_attack_damage(self):
-        if self.type_of_person == 'человек' or 'Человек':
+        if self.type_of_person == ('человек' or 'Человек'):
             self.attack_damage = 20
-        elif self.type_of_person == 'эльф' or 'Эльф':
+        elif self.type_of_person == ('эльф' or 'Эльф'):
             self.attack_damage = 25
-        elif self.type_of_person == 'гном' or 'Гном':
+        elif self.type_of_person == ('гном' or 'Гном'):
             self.attack_damage = 22
         return self.attack_damage
 
-    def upadets_param(self):
-        self.health = Character.get_health(self)
-        self.speed = Character.get_speed(self)
-        self.armor = Character.get_armor(self)
-        self.attack_range = Character.get_damage_range(self)
-        self.attack_damage = Character.get_attack_damage(self)
-"""тут я хочу прописать метод атаки персонажа"""
-    #def start_attack (self):
+#тут будут методы персонажа
 
+    def move(direction, cord0, cord, exit, input):  # direction - это направление движения, которое можно реализовать в main цикле
+        cord1 = [cord0[0], cord0[1]]
+        if direction == ('w' or 'W'):
+            cord0[1] -= 1
+        elif direction == ('a' or 'A'):
+            cord0[0] -= 1
+        elif direction == ('s' or 'S'):
+            cord0[1] += 1
+        elif direction == ('d' or 'D'):
+            cord0[0] += 1
+        else:
+            print('Некорректное направление')
 
-def move(direction, cord0, cord, exit,
-         input):  # direction - это направление движения, которое можно реализовать в main цикле
-    cord1 = [cord0[0], cord0[1]]
-    if direction == 'w':
-        cord0[1] -= 1
-    elif direction == 'a':
-        cord0[0] -= 1
-    elif direction == 's':
-        cord0[1] += 1
-    elif direction == 'd':
-        cord0[0] += 1
-    else:
-        print('Некорректное направление')
+        if exit[0] - 1 == cord0[0] and exit[1] == cord0[1]:
+            pass
+        elif input[0] == cord0[0] and input[1] == cord0[1]:
+            pass
+        elif cord0[1] < cord[1] - 1 and cord0[0] < cord[0] - 1 and cord0[1] >= 1 and cord0[0] >= 1:
+            pass
+        else:
+            cord0[0] = cord1[0]
+            cord0[1] = cord1[1]
+        return cord0
 
-    if exit[0] - 1 == cord0[0] and exit[1] == cord0[1]:
-        pass
-    elif input[0] == cord0[0] and input[1] == cord0[1]:
-        pass
-    elif cord0[1] < cord[1] - 1 and cord0[0] < cord[0] - 1 and cord0[1] >= 1 and cord0[0] >= 1:
-        pass
-    else:
-        cord0[0] = cord1[0]
-        cord0[1] = cord1[1]
-    return cord0
 
 class Monster(Character):
-    def __init__(self, name, health, armor, attack_range, attack_damage, speed, radius_finding):
-        self.health = health
-        self.radius_finding  = radius_finding
+    def __init__(self, first_coor_monster, second_coor_monster):
+        self.first_coor_monster = first_coor_monster
+        self.second_coor_monster = second_coor_monster
+
+
+    def move(self):
+        global key_list, direction
+        direction = random.choices(key_list)[0]
+        if direction == 'w':
+            if self.second_coor_monster > 1:
+                self.second_coor_monster -= 1
+            else:
+                self.second_coor_monster = self.second_coor_monster
+
+        elif direction == 's':
+            if self.second_coor_monster < 5:
+                self.second_coor_monster += 1
+            else:
+                self.second_coor_monster = self.second_coor_monster
+
+        elif direction == 'd':
+            if self.first_coor_monster < 5:
+                self.first_coor_monster += 1
+            else:
+                self.first_coor_monster = self.first_coor_monster
+
+        elif direction == 'a':
+            if self.first_coor_monster > 1:
+                self.first_coor_monster -= 1
+            else:
+                self.first_coor_monster = self.first_coor_monster
 
 class Items:
     def __init__(self, room, value, rare):
@@ -154,7 +169,7 @@ def main():
     global type_of_person
     print('''Добро пожаловать в подземелье, 
 Выбор расы во многом поможет Вам справиться с трудностями
-Отличительные черты человека: защита и урон, эльфа - скорость, а гнома - уровень здооровья''')
+Отличительные черты человека: защита и урон; эльфа - скорость, а гнома - уровень здооровья''')
 
     type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
     name_person= input('Назовите Вашего персонажа: ')
@@ -165,11 +180,13 @@ def main():
     person1.get_damage_range()
     person1.get_speed()
     person1.get_health()
-    person1.upadets_param()
 
-    print(f'''Имя: {person1.name},уровень жизни : {person1.health}, уровень защиты: {person1.armor}, дальность атаки: {person1.attack_range}, 
-урон: {person1.attack_damage} и скорость: {person1.speed}''')
+    print(f'''Имя: {person1.name}, уровень жизни : {person1.health}, уровень защиты: {person1.armor}, 
+дальность атаки: {person1.attack_range}, урон: {person1.attack_damage} и скорость: {person1.speed}''')
 
+    first_coor_monster = random.randint(1, 5)
+    second_coor_monster = random.randint(1, 5)
+    monster = Monster(first_coor_monster, second_coor_monster)
 
     rooms = [0]*3
     for i in range(3):
@@ -178,22 +195,19 @@ def main():
         rooms[i].display()
         n = i
         while True:
-            new_cord = move(input('Введите напраление "w", "a", "s", "d"'), rooms[n].cord0, rooms[n].cord, rooms[n].exit, rooms[n].input)
-            rooms[n].apdate(new_cord)
+            new_cord = Character.move(input('Введите напраление "w", "a", "s", "d"'), rooms[n].cord0, rooms[n].cord, rooms[n].exit, rooms[n].input)
+            monster.move()
+            rooms[n].update(new_cord)
             if rooms[n].input[0]==rooms[n].cord0[0] and rooms[n].input[1]==rooms[n].cord0[1] and n!=0:
                 n=n-1
 
             elif rooms[n].exit[0] - 1 == rooms[n].cord0[0] and rooms[n].exit[1] == rooms[n].cord0[1]:
                 n = n + 1
 
-
-
-
-
             if rooms[i].exit[0] - 1 == rooms[i].cord0[0] and rooms[i].exit[1] == rooms[i].cord0[1]:
                 break
             rooms[n].display()
-    print('Вы поюедили!!')
+    print('ВЫ ПОБЕДИЛИ !!!')
 
 main()
 
