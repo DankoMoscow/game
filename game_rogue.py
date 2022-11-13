@@ -104,6 +104,21 @@ class Character:
     def start_attack(self, another):
         another.health -= self.attack_damage
 
+    """
+    метод защиты, который наследуется монстром в том числе
+    """
+    def start_defence(self, another):
+        number = random.randint(0,20)
+        if self.armor >= number:
+            self.health += another.attack_damage
+        print  (number)
+
+    def take_item(self):
+        """
+        прописать про дистанцию между персонажем и предметом, если она <=1
+        то персонаж может его поднять. Пока не знаю как связать этот класс и класс предметов
+        """
+
 #тут будут методы персонажа
 
     def move(direction, cord0, cord, exit, input):  # direction - это направление движения, которое можно реализовать в main цикле
@@ -199,6 +214,7 @@ class Items:
     def parametres(self, name_item):
         if name_item == 'Кинжал':
             damage_item = 5
+            Character.take_item()
 
 def main():
     global type_of_person
@@ -207,6 +223,10 @@ def main():
 Отличительные черты человека: защита и урон; эльфа - скорость, а гнома - уровень здооровья''')
 
     type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
+    while type_of_person != ('эльф' or 'Эльф' or 'человек' or 'Человек' or 'гном' or 'Гном'):
+        print("Вы некорректно выбрали расу персонажа ")
+        type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
+
     name_person= input('Назовите Вашего персонажа: ')
 
     person1 = Character(name_person, type_of_person) #создаём экземпляр класса
@@ -248,7 +268,7 @@ def main():
                     print(f'Здоровье монстра после атаки: {monster.health}')
                 else:
                     print('Дистанция слишком велика для атаки')
-
+            person1.start_defence(monster) #это должно идти после атаки монстра
             new_cord1, new_cord2 = monster.move()
             rooms[n].update(new_cord, new_cord1, new_cord2)
 
