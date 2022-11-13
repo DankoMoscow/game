@@ -102,7 +102,12 @@ class Character:
         return self.attack_damage
 
     def start_attack(self, another):
-        another.health -= self.attack_damage
+        number = random.randint(0, 30)
+        if number <25:
+            another.health -= self.attack_damage
+        elif number >= 25:
+            another.health -= 2 * self.attack_damage #это шанс на критический урон
+            print("Вы нанесли критический урон")
 
     """
     метод защиты, который наследуется монстром в том числе
@@ -174,6 +179,33 @@ class Monster(Character):
         elif self.name_monster == 'Разбойник':
             self.health = 15
         return self.attack_damage
+
+    def get_monster_range(self):
+        if self.name_monster == 'Гоблин':
+            self.attack_range = 1
+        elif self.name_monster == 'Орк':
+            self.attack_range = 1
+        elif self.name_monster == 'Разбойник':
+            self.attack_range = 2
+        return self.attack_range
+
+    def get_monster_armor(self):
+        if self.name_monster == 'Гоблин':
+            self.armor = 3
+        elif self.name_monster == 'Орк':
+            self.armor = 8
+        elif self.name_monster == 'Разбойник':
+            self.armor = 4
+        return self.armor
+
+    def get_monster_speed(self):
+        if self.name_monster == 'Гоблин':
+            self.speed = 1
+        elif self.name_monster == 'Орк':
+            self.speed = 1
+        elif self.name_monster == 'Разбойник':
+            self.speed = 2
+        return self.speed
 
     def move(self):
         global key_list, direction
@@ -247,6 +279,8 @@ def main():
     monster = Monster(name_enemy, first_coor_monster_random, second_coor_monster_random) #указываем ему его координаты
     monster.get_monster_health()
     monster.get_monster_damage()
+    monster.get_monster_armor()
+    monster.get_monster_range()
 
     rooms = [0]*3
     for i in range(3):
