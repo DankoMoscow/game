@@ -109,9 +109,6 @@ class Character:
             another.health -= 2 * self.attack_damage #это шанс на критический урон
             print("Вы нанесли критический урон")
 
-    """
-    метод защиты, который наследуется монстром в том числе
-    """
     def start_defence(self, another):
         number = random.randint(0,20)
         if self.armor >= number:
@@ -217,13 +214,13 @@ class Monster(Character):
                 self.second_coor_monster = self.second_coor_monster
 
         elif direction == 's':
-            if self.second_coor_monster < len(room.matrix):
+            if self.second_coor_monster < 5:
                 self.second_coor_monster += 1
             else:
                 self.second_coor_monster = self.second_coor_monster
 
         elif direction == 'd':
-            if self.first_coor_monster < len(room.matrix):
+            if self.first_coor_monster < 5:
                 self.first_coor_monster += 1
             else:
                 self.first_coor_monster = self.first_coor_monster
@@ -253,11 +250,14 @@ def main():
     print('''Добро пожаловать в подземелье, 
 Выбор расы во многом поможет Вам справиться с трудностями
 Отличительные черты человека: защита и урон; эльфа - скорость, а гнома - уровень здооровья''')
-
+    rases = ['человек', 'Человек', 'эльф', 'Эльф', 'гном', 'Гном' ]
     type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
-    while type_of_person != ('эльф' or 'Эльф' or 'человек' or 'Человек' or 'гном' or 'Гном'):
-        print("Вы некорректно выбрали расу персонажа ")
-        type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
+
+    if type_of_person not in rases:
+        while type_of_person not in rases:
+            print("Вы некорректно выбрали расу персонажа ")
+            type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
+
 
     name_person= input('Назовите Вашего персонажа: ')
 
@@ -290,20 +290,23 @@ def main():
         n = i
         while True:
             new_cord = Character.move(input('Введите напраление "w", "a", "s", "d"'), rooms[n].cord0, rooms[n].cord, rooms[n].exit, rooms[n].input)
-            """
-            это боёвка
-            """
+            new_cord1, new_cord2 = monster.move()
+            print (f'Ваши новые координаты после шага: {new_cord}')
+            print(f'Координаты монстра{new_cord1, new_cord2}')
+
             button_attack = str(input('Желаете напасть на врага? Если да - нажмите f'))
             if button_attack == ('f' or 'F'):
-                if...
+                if (new_cord[0] - new_cord1 <= person1.attack_range and new_cord[1] - new_cord2 \
+                        <= person1.attack_range):
                     """тут надо сделать проверку условия, что если дистанция между монстром и игроком
-                    #меньше или  оавна person1.range_damage, то можно провести атаку)"""
+                    #меньше или  роавна person1.range_damage, то можно провести атаку
+                    пока условие не работает)"""
                     person1.start_attack(monster)
                     print(f'Здоровье монстра после атаки: {monster.health}')
                 else:
                     print('Дистанция слишком велика для атаки')
             person1.start_defence(monster) #это должно идти после атаки монстра
-            new_cord1, new_cord2 = monster.move()
+
             rooms[n].update(new_cord, new_cord1, new_cord2)
 
             if rooms[n].input[0]==rooms[n].cord0[0] and rooms[n].input[1]==rooms[n].cord0[1] and n!=0:
