@@ -125,7 +125,7 @@ class Character:
             another.health -= self.attack_damage
         elif number >= 25:
             another.health -= 2 * self.attack_damage #это шанс на критический урон
-            print("Вы нанесли критический урон")
+            print("Нанесён критический урон")
 
     def start_defence(self, another):
         number = random.randint(0,20)
@@ -186,11 +186,11 @@ class Monster(Character):
 
     def get_monster_damage(self):
         if self.name_monster == 'Гоблин':
-            self.health = 5
+            self.attack_damage = 5
         elif self.name_monster == 'Орк':
-            self.health = 20
+            self.attack_damage = 20
         elif self.name_monster == 'Разбойник':
-            self.health = 15
+            self.attack_damage = 15
         return self.attack_damage
 
     def get_monster_range(self):
@@ -294,6 +294,7 @@ def main():
         n = i
 
         while True:
+            print(f'Вы видите в комнате {monster.name_monster}')
             new_cord = person1.move(input('Введите напраление "w", "a", "s", "d"'), rooms[n].cord0, rooms[n].cord, rooms[n].exit, rooms[n].input)
             new_cord_monster = monster.move(rooms[n].cord_monster0,rooms[n].cord)
             if (fabs( new_cord_monster[0] - new_cord[0]) <= monster.attack_range and fabs(new_cord_monster[1] - new_cord[1]) \
@@ -302,7 +303,7 @@ def main():
                 print(f'Здоровье персонажа после атаки: {person1.health}')
 
             if person1.health <= 0:
-                print('Вы погибли, F')
+                print('Вы погибли, игра закончена')
                 raise SystemExit
 
             print (f'Ваши новые координаты после шага: {new_cord}')
@@ -316,7 +317,7 @@ def main():
                     print(f'Здоровье монстра после атаки: {monster.health}')
                 else:
                     print('Дистанция слишком велика для атаки')
-            person1.start_defence(monster) #это должно идти после атаки монстра
+            #person1.start_defence(monster) #это должно идти после атаки монстра
 
             rooms[n].update(new_cord, new_cord_monster)
 
