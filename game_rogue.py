@@ -9,7 +9,6 @@ class room:
         self.Y = random.randint(5,10)
         self.matrix = [[' '] * self.X for i in range(self.Y)]
 
-
     def generation(self):
         self.Y0 = random.randint(1, self.Y - 2)
         self.X0=1
@@ -25,8 +24,8 @@ class room:
         self.cord0 = [self.X0,self.Y0]
         self.cord = [self.X,self.Y]
         """
-                начальная кордината монстра
-                """
+        начальная кордината монстра
+        """
         while True:
             self.Y0_monster0 = random.randint(1, self.Y - 2)
             self.X0_monster0 = random.randint(1, self.X - 2)
@@ -34,9 +33,6 @@ class room:
             if self.matrix[self.cord_monster0[1]][self.cord_monster0[0]] != '๏':
                 self.matrix[self.cord_monster0[1]][self.cord_monster0[0]] = '☿'
                 break
-
-
-
 
     def update(self,new_cord, new_cord_monster):
         print(self.cord_monster0[0],self.cord_monster0[1])
@@ -49,11 +45,6 @@ class room:
         self.Y0_monster0 = new_cord_monster[1]
         self.X0_monster0 = new_cord_monster[0]
         self.matrix[self.Y0_monster0][self.X0_monster0] = '☿'
-
-
-        """
-        тут пытаюсь создать обновляющееся поле для монстра
-        """
 
     def display(self):
         for i in range(0, len(self.matrix)):
@@ -139,9 +130,7 @@ class Character:
         то персонаж может его поднять. Пока не знаю как связать этот класс и класс предметов
         """
 
-#тут будут методы персонажа
-
-    def move(self,direction, cord0, cord, exit, input):  # direction - это направление движения, которое можно реализовать в main цикле
+    def move(self,direction, cord0, cord, exit, input):
         cord1 = [cord0[0], cord0[1]]
         if direction == ('w' or 'W'):
             cord0[1] -= 1
@@ -252,6 +241,7 @@ class Items:
             damage_item = 5
             Character.take_item()
 
+
 def main():
     global type_of_person
     print('''Добро пожаловать в подземелье, 
@@ -264,7 +254,6 @@ def main():
         while type_of_person not in rases:
             print("Вы некорректно выбрали расу персонажа ")
             type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
-
 
     name_person= input('Назовите Вашего персонажа: ')
 
@@ -280,7 +269,7 @@ def main():
 
     list_enemy = ('Гоблин', 'Орк', 'Разйбойник')
     name_enemy = random.choice(list_enemy)
-    monster = Monster(name_enemy) #указываем ему его координаты
+    monster = Monster(name_enemy)
     monster.get_monster_health()
     monster.get_monster_damage()
     monster.get_monster_armor()
@@ -294,6 +283,10 @@ def main():
         n = i
 
         while True:
+            """
+            необходимо реализовать нормальную боёвку и стремление монстра убить персонажа, также
+            если у монстра меньше 0 жизней, то он пропадает
+            """
             print(f'Вы видите в комнате {monster.name_monster}')
             new_cord = person1.move(input('Введите напраление "w", "a", "s", "d"'), rooms[n].cord0, rooms[n].cord, rooms[n].exit, rooms[n].input)
             new_cord_monster = monster.move(rooms[n].cord_monster0,rooms[n].cord)
