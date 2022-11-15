@@ -114,10 +114,6 @@ class Character:
             self.attack_damage = 22
         return self.attack_damage
 
-    def start_attack(self):
-        return True
-
-
     def start_defence(self, another):
         number = random.randint(0, 20)
         if self.armor >= number:
@@ -125,7 +121,7 @@ class Character:
             print(f'Защита проведена успешно, здоровье персонажа: {self.health}')
 
     """
-    последствие атаки
+    последствие атаки с изменением урона
     """
     def attack_result(self, another):
         number = random.randint(0, 30)
@@ -134,12 +130,6 @@ class Character:
         elif number >= 25:
             another.health -= 2 * self.attack_damage  # это шанс на критический урон
             print("Нанесён критический урон")
-
-    def take_item(self):
-        """
-        прописать про дистанцию между персонажем и предметом, если она <=1
-        то персонаж может его поднять. Пока не знаю как связать этот класс и класс предметов
-        """
 
     def move(self, direction, cord0, cord, exit, input, cord_monster0):
         cord1 = [cord0[0], cord0[1]]
@@ -273,10 +263,16 @@ class Items:
         self.value = value
         self.rare = rare  # тут будет редкость с рандомом вероятности появления предмета
 
+    """
+    так, вроде я правильно обращаюсь к полям и атрибутам, но это пока не точно
+    надо добавить теперь предметы на карту. И чтобы они исчезали после того, как ты их поднимаешь
+    """
     def parametres(self, name_item):
         if name_item == 'Кинжал':
-            damage_item = 5
+            Character.attack_damage += 5
             Character.take_item()
+        elif name_item == 'Дальнобойные стрелы' and Character.type_of_person == 'Эльф':
+            Character.attack_range += 1
 
 
 def main():
@@ -325,24 +321,27 @@ def main():
             необходимо реализовать нормальную боёвку и стремление монстра убить персонажа, 
 
             """
-
+            attack_action = False
             if (fabs(rooms[n].X0_monster0 - rooms[n].X0) <= monster.attack_range) and (
                     fabs(rooms[n].Y0_monster0 - rooms[n].Y0) <= monster.attack_range) and monster.health > 0:
-                monster.start_attack()
                 monster.attack_result(person1)
+                attack_action = True
                 print(f'Здоровье персонажа после атаки: {person1.health}')
 
             if (fabs(rooms[n].X0_monster0 - rooms[n].X0) <= person1.attack_range) and (
                     fabs(rooms[n].Y0_monster0 - rooms[n].Y0) <= person1.attack_range):
-                if  input('Желаете напасть на врага? Если да - нажмите f, если хотите защититься - нажмите g') == ('f' or 'F'):
-                    person1.start_attack()
+                action = input('Желаете напасть на врага? Если да - нажмите f, если хотите защититься - нажмите g')
+                if  action == ('f' or 'F'):
                     person1.attack_result(monster)
                     print(f'Здоровье монстра после атаки: {monster.health}')
-                elif input() == ('g' or 'G') and monster.start_attack:
+                elif action == ('g' or 'G') and attack_action == True:
                     person1.start_defence(monster)
+                elif  action == ('g' or 'G') and attack_action == False:
+                    print('Враг не наносил Вам урон')
 
             new_cord = person1.move(input('Введите напраление "w", "a", "s", "d"'), rooms[n].cord0, rooms[n].cord,
                                     rooms[n].exit, rooms[n].input, rooms[n].cord_monster0)
+
             if monster.health > 0:
                 print(f'Вы видите в комнате {monster.name_monster}')
                 new_cord_monster = monster.move(rooms[n].cord_monster0, rooms[n].cord, new_cord)
@@ -367,6 +366,11 @@ def main():
             if rooms[i].exit[0] - 1 == rooms[i].cord0[0] and rooms[i].exit[1] == rooms[i].cord0[1]:
                 break
             rooms[n].display()
+
+            take_item = input (f'Желаете ли Вы поднять предмет? да/нет')
+            if take_item == 'да' or 'Да':
+                pass
+
             print(f'В конце хода у Вас: {person1.health} здоровья')
     print('ВЫ ПОБЕДИЛИ !!!')
 
