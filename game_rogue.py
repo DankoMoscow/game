@@ -9,11 +9,20 @@ class room:
     def __init__(self):
         self.X = random.randint(5, 10)
         self.Y = random.randint(5, 10)
+        self.f_item_coord = 0
+        self.s_item_coord = 0
         self.matrix = [[' '] * self.X for i in range(self.Y)]
 
     def generation(self):
         self.Y0 = random.randint(1, self.Y - 2)
         self.X0 = 1
+        """
+        тут создаю случайное появление координат предмета
+        """
+        self.f_item_coord = random.randint(1, self.X - 2)
+        self.s_item_coord = random.randint(1, self.Y - 2)
+        self.matrix[self.f_item_coord][self.s_item_coord] = '$'
+
         self.exit = [self.X, random.randint(1, self.Y - 2)]
         self.input = [0, self.Y0]
         self.matrix[self.Y0][self.X0] = '๏'
@@ -32,15 +41,19 @@ class room:
             self.Y0_monster0 = random.randint(1, self.Y - 2)
             self.X0_monster0 = random.randint(1, self.X - 2)
             self.cord_monster0 = [self.X0_monster0, self.Y0_monster0]
-            if self.matrix[self.cord_monster0[1]][self.cord_monster0[0]] != '๏':
+            if self.matrix[self.cord_monster0[1]][self.cord_monster0[0]] != ('๏' or '$'):
                 self.matrix[self.cord_monster0[1]][self.cord_monster0[0]] = '☿'
                 break
+        return self.f_item_coord, self.s_item_coord
 
     def update_character(self, new_cord):
         self.matrix[self.Y0][self.X0] = ' '
         self.Y0 = new_cord[1]
         self.X0 = new_cord[0]
         self.matrix[self.Y0][self.X0] = '๏'
+
+    def item_coord(self):
+        return self.f_item_coord, self.s_item_coord
 
     def update_monster(self, new_cord_monster, alive_or_ded):
         self.matrix[self.Y0_monster0][self.X0_monster0] = ' '
@@ -184,6 +197,7 @@ class Monster(Character):
             self.attack_damage = 20
         elif self.name_monster == 'Разбойник':
             self.attack_damage = 15
+
         return self.attack_damage
 
     def get_monster_range(self):
@@ -258,21 +272,21 @@ class Monster(Character):
 
 
 class Items:
-    def __init__(self, room, value, rare):
-        self.room = room
-        self.value = value
-        self.rare = rare  # тут будет редкость с рандомом вероятности появления предмета
+    def __init__(self, name_items):
+        self.name_items = name_items
 
     """
-    так, вроде я правильно обращаюсь к полям и атрибутам, но это пока не точно
     надо добавить теперь предметы на карту. И чтобы они исчезали после того, как ты их поднимаешь
     """
-    def parametres(self, name_item):
-        if name_item == 'Кинжал':
-            Character.attack_damage += 5
-            Character.take_item()
-        elif name_item == 'Дальнобойные стрелы' and Character.type_of_person == 'Эльф':
-            Character.attack_range += 1
+    def parametres(self):
+        if self.name_items == 'Кинжал':
+            self.damage = 5
+            return self.damage
+
+        elif self.name_items == 'Дальнобойные стрелы' and type_of_person == 'Эльф':
+            self.range_attack = 1
+
+            self.range_attack
 
 
 def main():
@@ -300,27 +314,34 @@ def main():
     print(f'''Имя: {person1.name}, уровень жизни : {person1.health}, уровень защиты: {person1.armor}, 
 дальность атаки: {person1.attack_range}, урон: {person1.attack_damage} и скорость: {person1.speed}''')
 
-    list_enemy = ('Гоблин', 'Орк', 'Разбойник')
-    name_enemy = random.choice(list_enemy)
-    monster = Monster(name_enemy)
-    monster.get_monster_health()
-    monster.get_monster_damage()
-    monster.get_monster_armor()
-    monster.get_monster_range()
-    monster.alive_or_ded()
-
     rooms = [0] * 3
     for i in range(3):
         rooms[i] = room()
         rooms[i].generation()
         rooms[i].display()
+
+        """
+        создаём экземпляр класса предметов
+        выше в rooms[i].generation() создаётся пометка, надо теперь привязать эти координаты к предмету
+        """
+        list_items = ['Кинжал', 'Дальнобойные стрелы', 'Великий меч']
+        name_items = random.choice(list_items)
+        item1 = Items(name_items)
+        item1.parametres()
         n = i
 
-        while True:
-            """
-            необходимо реализовать нормальную боёвку и стремление монстра убить персонажа, 
 
-            """
+        list_enemy = ('Гоблин', 'Орк', 'Разбойник')
+        name_enemy = random.choice(list_enemy)
+        monster = Monster(name_enemy)
+        monster.get_monster_health()
+        monster.get_monster_damage()
+        monster.get_monster_armor()
+        monster.get_monster_range()
+        monster.alive_or_ded()
+
+        while True:
+
             attack_action = False
             if (fabs(rooms[n].X0_monster0 - rooms[n].X0) <= monster.attack_range) and (
                     fabs(rooms[n].Y0_monster0 - rooms[n].Y0) <= monster.attack_range) and monster.health > 0:
@@ -329,7 +350,7 @@ def main():
                 print(f'Здоровье персонажа после атаки: {person1.health}')
 
             if (fabs(rooms[n].X0_monster0 - rooms[n].X0) <= person1.attack_range) and (
-                    fabs(rooms[n].Y0_monster0 - rooms[n].Y0) <= person1.attack_range):
+                    fabs(rooms[n].Y0_monster0 - rooms[n].Y0) <= person1.attack_range) and monster.health > 0:
                 action = input('Желаете напасть на врага? Если да - нажмите f, если хотите защититься - нажмите g')
                 if  action == ('f' or 'F'):
                     person1.attack_result(monster)
@@ -338,6 +359,8 @@ def main():
                     person1.start_defence(monster)
                 elif  action == ('g' or 'G') and attack_action == False:
                     print('Враг не наносил Вам урон')
+                    if person1.health <= 0:
+                        print('Вы погибли, игра закончена')
 
             new_cord = person1.move(input('Введите напраление "w", "a", "s", "d"'), rooms[n].cord0, rooms[n].cord,
                                     rooms[n].exit, rooms[n].input, rooms[n].cord_monster0)
@@ -350,12 +373,12 @@ def main():
                 print('Вы погибли, игра закончена')
                 raise SystemExit
 
-            print(f'Ваши новые координаты после шага: {new_cord}')
-            print(f'Координаты монстра{new_cord_monster}')
-
             rooms[n].update_character(new_cord)
             print(monster.name_monster, monster.alive_or_ded())
             rooms[n].update_monster(new_cord_monster, monster.alive_or_ded())
+
+            print(f'Ваши новые координаты после шага: {new_cord}')
+            print(f'Координаты монстра{new_cord_monster}')
 
             if rooms[n].input[0] == rooms[n].cord0[0] and rooms[n].input[1] == rooms[n].cord0[1] and n != 0:
                 n = n - 1
@@ -367,10 +390,13 @@ def main():
                 break
             rooms[n].display()
 
-            take_item = input (f'Желаете ли Вы поднять предмет? да/нет')
-            if take_item == 'да' or 'Да':
-                pass
+            print(f'Координаты {item1.name_items, rooms[n].item_coord()[0]}')
 
+            if (fabs(rooms[n].item_coord()[0] - rooms[n].Y0 <= 1) and fabs(rooms[n].item_coord()[1] - rooms[n].X0 <= 1)):
+                take_item = input (f'Желаете ли Вы поднять предмет? да/нет')
+                if take_item == 'да' or 'Да':
+                    param = item1.parametres()
+                    #person1 += param
             print(f'В конце хода у Вас: {person1.health} здоровья')
     print('ВЫ ПОБЕДИЛИ !!!')
 
