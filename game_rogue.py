@@ -66,7 +66,6 @@ class room:
         for i in range(0, len(self.matrix)):
             for j in range(0, len(self.matrix[i])):
                 print(self.matrix[i][j], end=' ')
-
             print()
         print()
 
@@ -276,7 +275,7 @@ class Items:
         self.name_items = name_items
 
     """
-    надо добавить теперь предметы на карту. И чтобы они исчезали после того, как ты их поднимаешь
+    Предметы должны исчезать после того как их поднимаешь
     """
     def parametres(self):
         if self.name_items == 'Кинжал':
@@ -285,8 +284,7 @@ class Items:
 
         elif self.name_items == 'Дальнобойные стрелы' and type_of_person == 'Эльф':
             self.range_attack = 1
-
-            self.range_attack
+            return self.range_attack
 
 
 def main():
@@ -295,14 +293,16 @@ def main():
 Выбор расы во многом поможет Вам справиться с трудностями
 Отличительные черты человека: защита и урон; эльфа - скорость, а гнома - уровень здооровья''')
     rases = ['человек', 'Человек', 'эльф', 'Эльф', 'гном', 'Гном']
-    type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
+    #type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
+    type_of_person = 'эльф'
 
     if type_of_person not in rases:
         while type_of_person not in rases:
             print("Вы некорректно выбрали расу персонажа ")
             type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
 
-    name_person = input('Назовите Вашего персонажа: ')
+    #name_person = input('Назовите Вашего персонажа: ')
+    name_person = 'Маркон '
 
     person1 = Character(name_person, type_of_person)  # создаём экземпляр класса
     person1.get_armor()
@@ -394,9 +394,9 @@ def main():
 
             if (fabs(rooms[n].item_coord()[0] - rooms[n].Y0 <= 1) and fabs(rooms[n].item_coord()[1] - rooms[n].X0 <= 1)):
                 take_item = input (f'Желаете ли Вы поднять предмет? да/нет')
-                if take_item == 'да' or 'Да':
+                if take_item == ('да' or 'Да'):
                     param = item1.parametres()
-                    #person1 += param
+                    person1 += param
             print(f'В конце хода у Вас: {person1.health} здоровья')
     print('ВЫ ПОБЕДИЛИ !!!')
 
