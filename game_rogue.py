@@ -7,8 +7,8 @@ key_list = ['w', 'a', 's', 'd']
 
 class room:
     def __init__(self):
-        self.X = random.randint(5, 10)
-        self.Y = random.randint(5, 10)
+        self.X = random.randint(6, 15)
+        self.Y = random.randint(6, 15)
         self.f_item_coord = 0
         self.s_item_coord = 0
         self.matrix = [[' '] * self.X for i in range(self.Y)]
@@ -16,12 +16,6 @@ class room:
     def generation(self):
         self.Y0 = random.randint(1, self.Y - 2)
         self.X0 = 1
-        """
-        тут создаю случайное появление координат предмета
-        """
-        self.f_item_coord = random.randint(1, self.X - 2)
-        self.s_item_coord = random.randint(1, self.Y - 2)
-        self.matrix[self.f_item_coord][self.s_item_coord] = '$'
 
         self.exit = [self.X, random.randint(1, self.Y - 2)]
         self.input = [0, self.Y0]
@@ -39,9 +33,9 @@ class room:
         """
         while True:
             self.Y0_monster0 = random.randint(1, self.Y - 2)
-            self.X0_monster0 = random.randint(1, self.X - 2)
+            self.X0_monster0 = random.randint(3, self.X - 2)
             self.cord_monster0 = [self.X0_monster0, self.Y0_monster0]
-            if self.matrix[self.cord_monster0[1]][self.cord_monster0[0]] != ('๏' or '$'):
+            if self.matrix[self.cord_monster0[1]][self.cord_monster0[0]] != '๏':
                 self.matrix[self.cord_monster0[1]][self.cord_monster0[0]] = '☿'
                 break
         return self.f_item_coord, self.s_item_coord
@@ -61,6 +55,8 @@ class room:
             self.Y0_monster0 = new_cord_monster[1]
             self.X0_monster0 = new_cord_monster[0]
             self.matrix[self.Y0_monster0][self.X0_monster0] = '☿'
+        else:
+            self.matrix[self.Y0_monster0][self.X0_monster0] = '†'
 
     def display(self):
         for i in range(0, len(self.matrix)):
@@ -78,7 +74,6 @@ class Character:
         self.armor = 0
         self.attack_range = 0
         self.attack_damage = 0
-        self.coords = None  # хрен знает, может убрать?
         self.speed = 0
 
     def get_health(self):
@@ -101,11 +96,11 @@ class Character:
 
     def get_speed(self):
         if self.type_of_person == ('человек' or 'Человек'):
-            self.speed = 5
+            self.speed = 1
         elif self.type_of_person == ('эльф' or 'Эльф'):
-            self.speed = 8
+            self.speed = 2
         elif self.type_of_person == ('гном' or 'Гном'):
-            self.speed = 3
+            self.speed = 1
         return self.speed
 
     def get_damage_range(self):
@@ -141,7 +136,7 @@ class Character:
             another.health -= self.attack_damage
         elif number >= 25:
             another.health -= 2 * self.attack_damage  # это шанс на критический урон
-            print("Нанесён критический урон")
+            print(f'{self.name } нанес критический урон')
 
     def move(self, direction, cord0, cord, exit, input, cord_monster0):
         cord1 = [cord0[0], cord0[1]]
@@ -172,8 +167,8 @@ class Character:
 
 
 class Monster(Character):
-    def __init__(self, name_monster):
-        self.name_monster = name_monster
+    def __init__(self, name):
+        self.name = name
         self.health = 0
         self.armor = 0
         self.attack_damage = 0
@@ -181,48 +176,48 @@ class Monster(Character):
         self.speed = 0
 
     def get_monster_health(self):
-        if self.name_monster == 'Гоблин':
+        if self.name == 'Гоблин':
             self.health = 40
-        elif self.name_monster == 'Орк':
+        elif self.name == 'Орк':
             self.health = 80
-        elif self.name_monster == 'Разбойник':
+        elif self.name == 'Разбойник':
             self.health = 55
         return self.health
 
     def get_monster_damage(self):
-        if self.name_monster == 'Гоблин':
+        if self.name == 'Гоблин':
             self.attack_damage = 5
-        elif self.name_monster == 'Орк':
+        elif self.name == 'Орк':
             self.attack_damage = 20
-        elif self.name_monster == 'Разбойник':
+        elif self.name == 'Разбойник':
             self.attack_damage = 15
 
         return self.attack_damage
 
     def get_monster_range(self):
-        if self.name_monster == 'Гоблин':
+        if self.name == 'Гоблин':
             self.attack_range = 1
-        elif self.name_monster == 'Орк':
+        elif self.name == 'Орк':
             self.attack_range = 1
-        elif self.name_monster == 'Разбойник':
+        elif self.name == 'Разбойник':
             self.attack_range = 2
         return self.attack_range
 
     def get_monster_armor(self):
-        if self.name_monster == 'Гоблин':
+        if self.name == 'Гоблин':
             self.armor = 3
-        elif self.name_monster == 'Орк':
+        elif self.name == 'Орк':
             self.armor = 8
-        elif self.name_monster == 'Разбойник':
+        elif self.name == 'Разбойник':
             self.armor = 4
         return self.armor
 
     def get_monster_speed(self):
-        if self.name_monster == 'Гоблин':
+        if self.name == 'Гоблин':
             self.speed = 1
-        elif self.name_monster == 'Орк':
+        elif self.name == 'Орк':
             self.speed = 1
-        elif self.name_monster == 'Разбойник':
+        elif self.name == 'Разбойник':
             self.speed = 2
         return self.speed
 
@@ -230,8 +225,8 @@ class Monster(Character):
         cord_monster1 = [cord_monster0[0], cord_monster0[1]]
         global key_list, direction
 
-        if (fabs(cord_monster0[0] - new_cord[0]) <= 3 and fabs(
-                cord_monster0[1] - new_cord[1]) <= 3):  # здесь задаётся радиус обнаружения
+        if (fabs(cord_monster0[0] - new_cord[0]) <= 5 and fabs(
+                cord_monster0[1] - new_cord[1]) <= 5):  # здесь задаётся радиус обнаружения
             if cord_monster0[0] > new_cord[0]:
                 cord_monster0[0] -= 1
             elif cord_monster0[0] < new_cord[0]:
@@ -273,18 +268,36 @@ class Monster(Character):
 class Items:
     def __init__(self, name_items):
         self.name_items = name_items
-
+        self.state = 'лежит'
+       # if name_items == 'Кинжал' or name_items =='Великий меч':
+       #     self.property = 'рукопашное'
+       # if name_items == 'Короткий лук' or name_items =='Длинный лук':
+       #     self.property = 'дальнобойное'
     """
-    Предметы должны исчезать после того как их поднимаешь
+    предметы будут исчезать после их поднятия
     """
     def parametres(self):
         if self.name_items == 'Кинжал':
-            self.damage = 5
-            return self.damage
-
-        elif self.name_items == 'Дальнобойные стрелы' and type_of_person == 'Эльф':
+            self.damage = 35
             self.range_attack = 1
-            return self.range_attack
+
+        elif self.name_items == 'Короткий лук':
+            self.damage = 25
+            self.range_attack = 2
+
+        elif self.name_items == 'Длинный лук':
+            self.damage = 30
+            self.range_attack = 3
+
+        elif self.name_items == 'Великий меч':
+            self.damage = 50
+            self.range_attack = 1
+
+    def loot(self,new_cord_monster,new_cord,alive_or_ded):
+        if (fabs(new_cord_monster[0]-new_cord[0]) == 1 or fabs(new_cord_monster[1]-new_cord[1]) == 1) and alive_or_ded=='мёртв':
+            self.action_predmet = input(f'Хотите взять {self.name_items} ? Да/нет')
+            if self.action_predmet == ('да' or 'Да'):
+                self.state = 'взят'
 
 
 def main():
@@ -292,6 +305,7 @@ def main():
     print('''Добро пожаловать в подземелье, 
 Выбор расы во многом поможет Вам справиться с трудностями
 Отличительные черты человека: защита и урон; эльфа - скорость, а гнома - уровень здооровья''')
+
     rases = ['человек', 'Человек', 'эльф', 'Эльф', 'гном', 'Гном']
     #type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
     type_of_person = 'эльф'
@@ -311,93 +325,109 @@ def main():
     person1.get_speed()
     person1.get_health()
 
+    list_enemy = ('Гоблин', 'Орк', 'Разбойник')
+
     print(f'''Имя: {person1.name}, уровень жизни : {person1.health}, уровень защиты: {person1.armor}, 
 дальность атаки: {person1.attack_range}, урон: {person1.attack_damage} и скорость: {person1.speed}''')
+    N = 3
+    rooms = [0] * N
+    monster = [0] * N
+    item = [0] * N
 
-    rooms = [0] * 3
-    for i in range(3):
+    for i in range(N):
         rooms[i] = room()
         rooms[i].generation()
         rooms[i].display()
 
         """
         создаём экземпляр класса предметов
-        выше в rooms[i].generation() создаётся пометка, надо теперь привязать эти координаты к предмету
         """
-        list_items = ['Кинжал', 'Дальнобойные стрелы', 'Великий меч']
+        list_items = ['Кинжал', 'Короткий лук', 'Великий меч','Длинный лук']
         name_items = random.choice(list_items)
-        item1 = Items(name_items)
-        item1.parametres()
+        item[i] = Items(name_items)
+        item[i].parametres()
         n = i
 
-
-        list_enemy = ('Гоблин', 'Орк', 'Разбойник')
         name_enemy = random.choice(list_enemy)
-        monster = Monster(name_enemy)
-        monster.get_monster_health()
-        monster.get_monster_damage()
-        monster.get_monster_armor()
-        monster.get_monster_range()
-        monster.alive_or_ded()
+        monster[i] = Monster(name_enemy)
+        monster[i].get_monster_health()
+        monster[i].get_monster_damage()
+        monster[i].get_monster_armor()
+        monster[i].get_monster_range()
+        monster[i].get_monster_speed()
+        monster[i].alive_or_ded()
 
         while True:
-
+            print(f'В начале хода у Вас: {person1.health} здоровья')
             attack_action = False
-            if (fabs(rooms[n].X0_monster0 - rooms[n].X0) <= monster.attack_range) and (
-                    fabs(rooms[n].Y0_monster0 - rooms[n].Y0) <= monster.attack_range) and monster.health > 0:
-                monster.attack_result(person1)
+            if (fabs(rooms[n].X0_monster0 - rooms[n].X0) <= monster[n].attack_range) and (
+                    fabs(rooms[n].Y0_monster0 - rooms[n].Y0) <= monster[n].attack_range) and monster[n].health > 0:
+                monster[n].attack_result(person1)
                 attack_action = True
                 print(f'Здоровье персонажа после атаки: {person1.health}')
+                if person1.health <= 0:
+                    print('Вы погибли, игра закончена')
+                    raise SystemExit
 
             if (fabs(rooms[n].X0_monster0 - rooms[n].X0) <= person1.attack_range) and (
-                    fabs(rooms[n].Y0_monster0 - rooms[n].Y0) <= person1.attack_range) and monster.health > 0:
+                    fabs(rooms[n].Y0_monster0 - rooms[n].Y0) <= person1.attack_range) and monster[n].health > 0:
                 action = input('Желаете напасть на врага? Если да - нажмите f, если хотите защититься - нажмите g')
                 if  action == ('f' or 'F'):
-                    person1.attack_result(monster)
-                    print(f'Здоровье монстра после атаки: {monster.health}')
+                    person1.attack_result(monster[n])
+                    print(f'Здоровье монстра после атаки: {monster[n].health}')
+
                 elif action == ('g' or 'G') and attack_action == True:
-                    person1.start_defence(monster)
+                    person1.start_defence(monster[n])
+
                 elif  action == ('g' or 'G') and attack_action == False:
                     print('Враг не наносил Вам урон')
                     if person1.health <= 0:
                         print('Вы погибли, игра закончена')
 
-            new_cord = person1.move(input('Введите напраление "w", "a", "s", "d"'), rooms[n].cord0, rooms[n].cord,
-                                    rooms[n].exit, rooms[n].input, rooms[n].cord_monster0)
+            if monster[n].health > 0:
+                print(f'Вы видите в комнате {monster[n].name}')
 
-            if monster.health > 0:
-                print(f'Вы видите в комнате {monster.name_monster}')
-                new_cord_monster = monster.move(rooms[n].cord_monster0, rooms[n].cord, new_cord)
+            for j in range(person1.speed):
+                new_cord = person1.move(input('Введите напраление "w", "a", "s", "d"'), rooms[n].cord0, rooms[n].cord,
+                                        rooms[n].exit, rooms[n].input, rooms[n].cord_monster0)
 
-            if person1.health <= 0:
-                print('Вы погибли, игра закончена')
-                raise SystemExit
+                rooms[n].update_character(new_cord)
+                if rooms[n].input[0] == rooms[n].cord0[0] and rooms[n].input[1] == rooms[n].cord0[1] and n != 0:
+                    n = n - 1
 
-            rooms[n].update_character(new_cord)
-            print(monster.name_monster, monster.alive_or_ded())
-            rooms[n].update_monster(new_cord_monster, monster.alive_or_ded())
+                elif rooms[n].exit[0] - 1 == rooms[n].cord0[0] and rooms[n].exit[1] == rooms[n].cord0[1]:
+                    n = n + 1
 
-            print(f'Ваши новые координаты после шага: {new_cord}')
-            print(f'Координаты монстра{new_cord_monster}')
-
-            if rooms[n].input[0] == rooms[n].cord0[0] and rooms[n].input[1] == rooms[n].cord0[1] and n != 0:
-                n = n - 1
-
-            elif rooms[n].exit[0] - 1 == rooms[n].cord0[0] and rooms[n].exit[1] == rooms[n].cord0[1]:
-                n = n + 1
+                if rooms[i].exit[0] - 1 == rooms[i].cord0[0] and rooms[i].exit[1] == rooms[i].cord0[1]:
+                    break
+                rooms[n].display()
 
             if rooms[i].exit[0] - 1 == rooms[i].cord0[0] and rooms[i].exit[1] == rooms[i].cord0[1]:
                 break
-            rooms[n].display()
 
-            print(f'Координаты {item1.name_items, rooms[n].item_coord()[0]}')
+            if monster[n].health > 0:
+                for m in range(monster[i].speed):
+                    new_cord_monster = monster[n].move(rooms[n].cord_monster0, rooms[n].cord, new_cord)
+                    rooms[n].update_monster(new_cord_monster, monster[i].alive_or_ded())
+                    rooms[n].display()
+            else:
+                rooms[n].update_monster(new_cord_monster, monster[n].alive_or_ded())
+                rooms[n].display()
 
-            if (fabs(rooms[n].item_coord()[0] - rooms[n].Y0 <= 1) and fabs(rooms[n].item_coord()[1] - rooms[n].X0 <= 1)):
-                take_item = input (f'Желаете ли Вы поднять предмет? да/нет')
-                if take_item == ('да' or 'Да'):
-                    param = item1.parametres()
-                    person1 += param
-            print(f'В конце хода у Вас: {person1.health} здоровья')
+            print(monster[n].name, monster[n].alive_or_ded())
+
+            if item[n].state =='лежит':
+                item[n].loot(new_cord_monster, new_cord, monster[n].alive_or_ded())
+                characteristics = [item[n].range_attack,item[n].damage]
+                person1.attack_range = characteristics[0]
+                person1.attack_damage = characteristics[1]
+
+
+            #    if (fabs(rooms[n].item_coord()[0] - rooms[n].Y0 <= 1) and fabs(rooms[n].item_coord()[1] - rooms[n].X0 <= 1)):
+            #        take_item = input (f'Желаете ли Вы поднять предмет? да/нет')
+            #       if take_item == ('да' or 'Да'):
+            #           param = item1.parametres()
+            #           person1 += param
     print('ВЫ ПОБЕДИЛИ !!!')
 
 main()
