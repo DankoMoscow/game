@@ -299,37 +299,62 @@ class Items:
             if self.action_predmet == ('да' or 'Да'):
                 self.state = 'взят'
 
-
-def main():
-    global type_of_person
+def privetstvie():
+    global type_of_person, name_person
     print('''Добро пожаловать в подземелье, 
-Выбор расы во многом поможет Вам справиться с трудностями
-Отличительные черты человека: защита и урон; эльфа - скорость, а гнома - уровень здооровья''')
+    Выбор расы во многом поможет Вам справиться с трудностями
+    Отличительные черты человека: защита и урон; эльфа - скорость, а гнома - уровень здооровья''')
 
     rases = ['человек', 'Человек', 'эльф', 'Эльф', 'гном', 'Гном']
-    #type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
+    # type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
     type_of_person = 'эльф'
 
     if type_of_person not in rases:
         while type_of_person not in rases:
             print("Вы некорректно выбрали расу персонажа ")
             type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
-
     #name_person = input('Назовите Вашего персонажа: ')
     name_person = 'Маркон '
 
-    person1 = Character(name_person, type_of_person)  # создаём экземпляр класса
-    person1.get_armor()
-    person1.get_attack_damage()
-    person1.get_damage_range()
-    person1.get_speed()
-    person1.get_health()
+def making_character():
+    """
+    создаёт монстра, ккоторого помещаю в main
+    """
+    personx = Character(name_person, type_of_person)  # создаём экземпляр класса
+    personx.get_armor()
+    personx.get_attack_damage()
+    personx.get_damage_range()
+    personx.get_speed()
+    personx.get_health()
+    return personx
 
+def making_monster():
+    """
+    создаёт монстра, ккоторого помещаю в main
+    """
     list_enemy = ('Гоблин', 'Орк', 'Разбойник')
+    name_enemy = random.choice(list_enemy)
+    monsterX = Monster(name_enemy)
+    monsterX.get_monster_health()
+    monsterX.get_monster_damage()
+    monsterX.get_monster_armor()
+    monsterX.get_monster_range()
+    monsterX.get_monster_speed()
+    monsterX.alive_or_ded()
+    return monsterX
 
+
+def main():
+    global N, rooms, monster, item, person1
+    privetstvie()
+    person1 = making_character()
+    """
+    может быть принты перенести в сам pygame
+    """
     print(f'''Имя: {person1.name}, уровень жизни : {person1.health}, уровень защиты: {person1.armor}, 
 дальность атаки: {person1.attack_range}, урон: {person1.attack_damage} и скорость: {person1.speed}''')
-    N = 3
+
+    N = 3 #количество комнат
     rooms = [0] * N
     monster = [0] * N
     item = [0] * N
@@ -338,7 +363,6 @@ def main():
         rooms[i] = room()
         rooms[i].generation()
         rooms[i].display()
-
         """
         создаём экземпляр класса предметов
         """
@@ -346,22 +370,17 @@ def main():
         name_items = random.choice(list_items)
         item[i] = Items(name_items)
         item[i].parametres()
+
         n = i
 
-        name_enemy = random.choice(list_enemy)
-        monster[i] = Monster(name_enemy)
-        monster[i].get_monster_health()
-        monster[i].get_monster_damage()
-        monster[i].get_monster_armor()
-        monster[i].get_monster_range()
-        monster[i].get_monster_speed()
-        monster[i].alive_or_ded()
+        monster[i] = making_monster()
 
         while True:
             print(f'В начале хода у Вас: {person1.health} здоровья')
             attack_action = False
+
             if (fabs(rooms[n].X0_monster0 - rooms[n].X0) <= monster[n].attack_range) and (
-                    fabs(rooms[n].Y0_monster0 - rooms[n].Y0) <= monster[n].attack_range) and monster[n].health > 0:
+                                fabs(rooms[n].Y0_monster0 - rooms[n].Y0) <= monster[n].attack_range) and monster[n].health > 0:
                 monster[n].attack_result(person1)
                 attack_action = True
                 print(f'Здоровье персонажа после атаки: {person1.health}')
@@ -422,12 +441,6 @@ def main():
                 person1.attack_range = characteristics[0]
                 person1.attack_damage = characteristics[1]
 
-
-            #    if (fabs(rooms[n].item_coord()[0] - rooms[n].Y0 <= 1) and fabs(rooms[n].item_coord()[1] - rooms[n].X0 <= 1)):
-            #        take_item = input (f'Желаете ли Вы поднять предмет? да/нет')
-            #       if take_item == ('да' or 'Да'):
-            #           param = item1.parametres()
-            #           person1 += param
     print('ВЫ ПОБЕДИЛИ !!!')
 
 main()
