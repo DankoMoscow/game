@@ -58,12 +58,7 @@ class room:
         else:
             self.matrix[self.Y0_monster0][self.X0_monster0] = '†'
 
-    def display(self):
-        for i in range(0, len(self.matrix)):
-            for j in range(0, len(self.matrix[i])):
-                print(self.matrix[i][j], end=' ')
-            print()
-        print()
+
 
 
 class Character:
@@ -269,10 +264,6 @@ class Items:
     def __init__(self, name_items):
         self.name_items = name_items
         self.state = 'лежит'
-       # if name_items == 'Кинжал' or name_items =='Великий меч':
-       #     self.property = 'рукопашное'
-       # if name_items == 'Короткий лук' or name_items =='Длинный лук':
-       #     self.property = 'дальнобойное'
     """
     предметы будут исчезать после их поднятия
     """
@@ -280,34 +271,33 @@ class Items:
         if self.name_items == 'Кинжал':
             self.damage = 35
             self.range_attack = 1
-
+            self.health = 0
         elif self.name_items == 'Короткий лук':
             self.damage = 25
             self.range_attack = 2
-
+            self.health = 0
         elif self.name_items == 'Длинный лук':
             self.damage = 30
             self.range_attack = 3
-
+            self.health = 0
         elif self.name_items == 'Великий меч':
             self.damage = 50
             self.range_attack = 1
+            self.health = 0
+        elif self.name_items == 'Зелье лечения':
+            self.damage = 0
+            self.range_attack = 0
+            self.health = 30
 
-    def loot(self,new_cord_monster,new_cord,alive_or_ded):
-        if (fabs(new_cord_monster[0]-new_cord[0]) <= 1 and fabs(new_cord_monster[1]-new_cord[1]) <= 1) and alive_or_ded=='мёртв':
-            self.action_predmet = input(f'Хотите взять {self.name_items} ? Да/нет')
-            if self.action_predmet == ('да' or 'Да'):
-                self.state = 'взят'
+
 
 def privetstvie():
     global type_of_person, name_person
     print('''Добро пожаловать в подземелье, 
-    Выбор расы во многом поможет Вам справиться с трудностями
-    Отличительные черты человека: защита и урон; эльфа - скорость, а гнома - уровень здооровья''')
+Выбор расы во многом поможет Вам справиться с трудностями
+Отличительные черты человека: защита и урон; эльфа - скорость, а гнома - уровень здооровья''')
 
     rases = ['человек', 'Человек', 'эльф', 'Эльф', 'гном', 'Гном']
-    # type_of_person = str(input(f'Выберите расу персонажа: человек, эльф или гном '))
-    type_of_person = 'эльф'
 
     if type_of_person not in rases:
         while type_of_person not in rases:
@@ -318,7 +308,7 @@ def privetstvie():
 
 def making_character():
     """
-    создаёт монстра, ккоторого помещаю в main
+    создаёт персонажа, ккоторого помещаю в main
     """
     personx = Character(name_person, type_of_person)  # создаём экземпляр класса
     personx.get_armor()
